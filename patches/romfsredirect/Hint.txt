@@ -1,0 +1,9 @@
+sig:
+
+mountRom:  31 FF 2F E1 04 00 A0 E1  0F 10 A0 E1 A4 2F B0 E1
+mountSavedata: E7 44 20 C9 
+mountArchive: 10 00 97 E5 D8 20 CD E1  00 00 8D 
+regArchive: B4 44 20 C8 59 46 60 D8
+
+mountSavedata calls  mountArchive and regArchive,
+mountRom calls regArchive
