@@ -38,24 +38,30 @@ print("textBase: %08x\ntextSize: %08x\nroSize: %08x\nrwSize: %08x\nbssSize: %08x
 if (textBase != 0x100000):
 	print('textBase mismatch, might be an encrypted exheader file.');
 	exit(0);
-bss = '\x00' * bssSize;
+
 exefsPath = 'workdir/exefs/';
 with open(exefsPath + 'code.bin', "rb") as f:
 	text = f.read(textSize);
 	ro = f.read(roSize);
 	rw = f.read(rwSize);
+	
+with open('e2elf.ld', 'r') as f:
+	ldscript = f.read();
+ldscript = ldscript.replace('%bsssize%', str(bssSize));
+
+with open('workdir/e2elf.ld', 'wb') as f:
+	f.write(ldscript);
 
 writefile(exefsPath + 'text.bin', text);
 writefile(exefsPath + 'ro.bin', ro);
 writefile(exefsPath + 'rw.bin', rw);
-writefile(exefsPath + 'bss.bin', bss);
 
 objfiles = '';
-for i in (('text', 'text'), ('ro', 'rodata'), ('rw', 'data'), ('bss','bss')):
+for i in (('text', 'text'), ('ro', 'rodata'), ('rw', 'data')):
 	a, b = i;
 	run(OC + ' -I binary -O elf32-littlearm --rename-section .data=.' + b + ' ' 
 		+ exefsPath + a + '.bin ' + exefsPath + a + '.o');
 	objfiles += exefsPath + a + '.o' + ' ';
 	
 print objfiles;
-run (LD + ' --accept-unknown-input-arch -T e2elf.ld -o workdir/exefs.elf ' + objfiles);
+run (LD + ' --accept-unknown-input-arch -T workdir/e2elf.ld -o workdir/exefs.elf ' + objfiles);
