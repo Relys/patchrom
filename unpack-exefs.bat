@@ -1,0 +1,1 @@
+ctrtool -t exefs --exefsdir=workdir\exefs workdir\exefs.bin
