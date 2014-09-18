@@ -35,6 +35,7 @@ roSize = roPages * 0x1000;
 rwSize = rwPages * 0x1000;
 bssSize = ( (bssSize / 0x1000) + 1 ) * 0x1000;
 print("textBase: %08x\ntextSize: %08x\nroSize: %08x\nrwSize: %08x\nbssSize: %08x\n" % (textBase, textSize, roSize, rwSize, bssSize))
+bssSize += 0x4000;	# reserve stack region for our payload
 if (textBase != 0x100000):
 	print('textBase mismatch, might be an encrypted exheader file.');
 	exit(0);

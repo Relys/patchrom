@@ -3,7 +3,7 @@ OUTPUT_ARCH(arm)
 
 MEMORY {
 
-	memregion	: ORIGIN = 0x100000, LENGTH = 10000K
+	memregion	: ORIGIN = 0x100000, LENGTH = 100000K
 }
 
 __memregion_start	=	ORIGIN(memregion);
