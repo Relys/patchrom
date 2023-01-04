@@ -34,7 +34,7 @@ textSize = textPages * 0x1000;
 roSize = roPages * 0x1000;
 rwSize = rwPages * 0x1000;
 bssSize = ( (bssSize / 0x1000) + 1 ) * 0x1000;
-print("textBase: %08x\ntextSize: %08x\nroSize: %08x\nrwSize: %08x\nbssSize: %08x\n" % (textBase, textSize, roSize, rwSize, bssSize))
+print("textBase: %08x\ntextSize: %08x\nroSize: %08x\nrwSize: %08x\nbssSize: %08x\n" % (int(textBase), int(textSize), int(roSize), int(rwSize), int(bssSize)))
 bssSize += 0x4000;	# reserve stack region for our payload
 if (textBase != 0x100000):
 	print('textBase mismatch, might be an encrypted exheader file.');
@@ -48,9 +48,9 @@ with open(exefsPath + 'code.bin', "rb") as f:
 	
 with open('e2elf.ld', 'r') as f:
 	ldscript = f.read();
-ldscript = ldscript.replace('%bsssize%', str(bssSize));
+ldscript = ldscript.replace('%bsssize%', str(int(bssSize)));
 
-with open('workdir/e2elf.ld', 'wb') as f:
+with open('workdir/e2elf.ld', 'w') as f:
 	f.write(ldscript);
 
 writefile(exefsPath + 'text.bin', text);
@@ -64,5 +64,5 @@ for i in (('text', 'text'), ('ro', 'rodata'), ('rw', 'data')):
 		+ exefsPath + a + '.bin ' + exefsPath + a + '.o');
 	objfiles += exefsPath + a + '.o' + ' ';
 	
-print objfiles;
-run (LD + ' --accept-unknown-input-arch -T workdir/e2elf.ld -o workdir/exefs.elf ' + objfiles);
+print(objfiles);
+run(LD + ' --accept-unknown-input-arch -T workdir/e2elf.ld -o workdir/exefs.elf ' + objfiles);
