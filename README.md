@@ -7,7 +7,7 @@ devkitARM is required for most tools.
 
 Usage
 ========
-exefs2elf.py: convert exefs to elf file.
+exefs2elf.py: convert exefs to elf file. [now works with python 3]
 
 unpack-exefs.bat: unpack exefs.bin.
 
